@@ -1,7 +1,7 @@
 import { Space, Table, Typography, Button } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { getAllProduct } from '../../../API/api'
-import { EditOutlined, DeleteOutlined, PlusOutlined, EyeFilled, EyeOutlined, PlusCircleOutlined } from '@ant-design/icons'
+import { getAllProduct } from '../../../utils/productAPI.js'
+import { EditOutlined, DeleteOutlined, EyeOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 
 function Products() {
@@ -10,13 +10,21 @@ function Products() {
     const [dataSource, setDataSource] = useState([])
 
     useEffect(() => {
-        setLoading(true)
-        // Lấy data từ api
-        getAllProduct().then(res => {
-            setDataSource(res.products)
-            setLoading(false)
-        })
-    }, [])
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                // Gọi hàm getAllProduct bên api
+                const products = await getAllProduct();
+                setDataSource(products); 
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     const handleEdit = (id) => {
         navigate(`/products/${id}`);
