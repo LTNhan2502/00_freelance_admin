@@ -65,6 +65,8 @@ const RecentProduct = () => {
     getRecentProduct().then((res) => {
       // Chuyển đối tượng sản phẩm thành mảng để sử dụng trong bảng
       const productData = [res];
+      console.log(productData);
+      
       setDataSource(productData);
       setLoading(false);
     });

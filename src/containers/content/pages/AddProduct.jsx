@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Form, Input, InputNumber, Upload, Button, message } from 'antd';
-// import { CreateProduct } from '../../../utils/productAPI';
+import { CreateProduct } from '../../../utils/productAPI';
 
 const normFile = (e) => {
-    if (Array.isArray(e)) {
-        return e;
-    }
-    return e?.fileList;
+  if (Array.isArray(e)) {
+    return e;
+  }
+  return e?.fileList;
 };
 
 const beforeUpload = (file) => {
@@ -21,11 +21,36 @@ const beforeUpload = (file) => {
 
 function AddProduct() {
   // Xử lí submit form
-  const onFinish = (values) => {
-    // Post api
-    console.log('Form values: ', values);
-    // const result = await CreateProduct()
-    message.success('Thêm mới thành công!');
+  const onFinish = async (values) => {
+    // Lấy thông tin từ form
+    const productName = values.productName;
+    const price = values.price;
+    const quantity = values.quantity;
+
+
+    //Kiểm tra thêm sản phẩm ở đây
+    const formData = new FormData();
+    const imageFile = values.fileList?.[0]?.originFileObj;
+    formData.append('imageProduct', imageFile);
+    const imgFile = formData.get('imageProduct');
+    const imageProduct = imgFile.name
+    const typeQ = typeof(quantity)
+    const typeP = typeof(price)
+    console.log('Kiểu dữ liệu của quantity:', typeQ);
+    console.log('Kiểu dữ liệu của price:', typeP);
+    console.log('Name của imageProduct:', imageProduct);
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
+  }
+    try {
+      // Gọi API với dữ liệu sản phẩm và mảng file ảnh
+      const result = await CreateProduct(imageProduct, productName, price, quantity);
+      console.log('Kết quả API:', result);
+      message.success('Thêm mới thành công!');
+    } catch (error) {
+      console.error('Lỗi khi thêm sản phẩm:', error);
+      message.error('Thêm mới thất bại!');
+    }
   };
 
   return (
@@ -37,26 +62,23 @@ function AddProduct() {
         style={{ width: '100%', minWidth: '600px' }}
         onFinish={onFinish}
       >
-        <Form.Item label="Tên sản phẩm" name="input">
+        <Form.Item label="Tên sản phẩm" name="productName">
           <Input />
         </Form.Item>
 
-        <Form.Item label="Giá" name="input">
-          <Input />
+        <Form.Item label="Giá" name="price">
+          <InputNumber style={{ width: '100%' }}/>
         </Form.Item>
 
-        <Form.Item label="Số lượng" name="inputNumber">
+        <Form.Item label="Số lượng" name="quantity">
           <InputNumber style={{ width: '100%' }} />
         </Form.Item>
 
-        <Form.Item label="Chiết khấu" name="input">
-          <Input />
-        </Form.Item>
-
-        <Form.Item label="Hình ảnh" valuePropName="fileList" getValueFromEvent={normFile}>
+        <Form.Item label="Hình ảnh" name="fileList" valuePropName="fileList" getValueFromEvent={normFile}>
           <Upload 
             action="/upload.do" 
             listType="picture-card"
+            multiple={false}
             beforeUpload={beforeUpload}
             className="upload-list-inline"
           >

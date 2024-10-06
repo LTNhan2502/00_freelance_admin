@@ -12,7 +12,7 @@ function Login() {
 
         if (resultLogin.data && resultLogin.data.EC === 0) {
             message.success("Đăng nhập thành công");
-            localStorage.setItem("access_token_admin", resultLogin.data.token);
+            localStorage.setItem("access_token", resultLogin.data.token);
             navigate("/");
         } else {
             message.error("Đăng nhập không thành công");

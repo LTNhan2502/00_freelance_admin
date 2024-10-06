@@ -1,6 +1,5 @@
 import { Space, Table, Typography, Button } from "antd";
 import React, { useEffect, useState } from "react";
-// import { getAllProduct } from "../../../API/api.jsx";
 import { getAllProduct } from "../../../utils/productAPI.js";
 import {
   EditOutlined,
@@ -11,26 +10,26 @@ import {
 import { useNavigate } from "react-router-dom";
 
 function Products() {
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [dataSource, setDataSource] = useState([]);
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const [dataSource, setDataSource] = useState([]);
 
-  useEffect(() => {
-    getProducts();
-  }, []);
+    useEffect(() => {
+        getProducts();
+    }, []);
 
-  const getProducts = async () => {
-    setLoading(true);
-    const result = await getAllProduct();
+    const getProducts = async () => {
+        setLoading(true);
+        const productData = await getAllProduct();
+        const result = productData.data.data
+        // Đã fix
+        console.log(productData.data.data);
 
-    // Đây
-    console.log(result.data);
-
-    if (result && result.data) {
-      setLoading(false);
-      setDataSource(result);
-    }
-  };
+        if (result && productData.data.data) {
+            setLoading(false);
+            setDataSource(result);
+        }
+    };
 
   const handleEdit = (id) => {
     navigate(`/products/${id}`);
@@ -52,22 +51,22 @@ function Products() {
   const columns = [
     {
       title: "Tên sản phẩm",
-      dataIndex: "title",
+      dataIndex: "productName",
     },
     {
-      title: "Phân loại",
-      dataIndex: "category",
+      title: "Số lượng",
+      dataIndex: "quantity",
     },
     {
       title: "Đơn giá",
       dataIndex: "price",
     },
     {
-      title: "Tồn kho",
+      title: "Trang thái",
       dataIndex: "stock",
     },
     {
-      title: "Hiệu",
+      title: "User sở hữu",
       dataIndex: "brand",
     },
     {

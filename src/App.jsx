@@ -16,7 +16,7 @@ function App() {
 
   // Kiểm tra trạng thái đăng nhập khi vừa vào web
   useEffect(() => {
-    const auth = localStorage.getItem("access_token_admin");
+    const auth = localStorage.getItem("access_token");
 
     if (auth) {
       setIsAuthenticated(true);
