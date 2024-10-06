@@ -2,7 +2,7 @@ import { Space, Table, Typography, Button } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { EditOutlined, DeleteOutlined, EyeOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom';
-import { getAllUsersAdmin } from '../../../../utils/adminAPI.js';
+import { getUser } from '../../../../utils/userAPI';
 
 function Users() {
     const navigate = useNavigate()
@@ -16,11 +16,13 @@ function Users() {
 
     const getAllUsers = async() => {
         setLoading(true)
-        const result = await getAllUsersAdmin();
-        if(res && res.data){
-            setLoading(false)
-            setDataSource(result)
-        }
+        const res = await getUser();
+        console.log(res);
+        
+        // if(res && res.data){
+        //     setLoading(false)
+        //     setDataSource(result)
+        // }
     }
 
     const handleEdit = (id) => {
