@@ -31,11 +31,13 @@ function Users() {
     getAllUsers();
   }, []);
 
-  // Fetch users API
-  const getAllUsers = async () => {
-    setLoading(true);
-    const usersData = await getUser();
-    const result = usersData.data.data;
+    // Fetch users API
+    const getAllUsers = async () => {
+        setLoading(true);
+        const usersData = await getUser();
+        const result = usersData.data.data;
+
+
 
     // Handle thêm số 0 cho sđt
     if (result) {
@@ -98,40 +100,40 @@ function Users() {
     navigate("/products/add");
   };
 
-  const columns = [
-    {
-      title: "Tên user",
-      dataIndex: "userName",
-    },
-    {
-      title: "Số điện thoại",
-      dataIndex: "numberPhone", // Use the modified 'numberPhone' from the state
-    },
-    {
-      title: "Mã giới thiệu",
-      dataIndex: "referralCode",
-    },
-    {
-      title: "Action",
-      render: (text, record) => (
-        <Space size="middle">
-          <Button
-            icon={<PlusOutlined />}
-            onClick={() => showModal(record)} // Show modal when clicked, pass the selected user
-          />
-          <Button
-            icon={<EditOutlined />}
-            onClick={() => handleEdit(record.id)}
-          />
-          <Button
-            icon={<DeleteOutlined />}
-            onClick={() => handleDelete(record)}
-            danger
-          />
-        </Space>
-      ),
-    },
-  ];
+    const columns = [
+        {
+            title: "Tên user",
+            dataIndex: "userName",
+        },
+        {
+            title: "Số điện thoại",
+            dataIndex: "numberPhone",  // Use the modified 'numberPhone' from the state
+        },
+        {
+            title: "Mã giới thiệu",
+            dataIndex: "referralCode",
+        },
+        {
+            title: "Action",
+            render: (text, record) => (
+                <Space size="middle">
+                    <Button 
+                        icon={<PlusOutlined />} 
+                        onClick={() => showModal(record)}  // Show modal when clicked, pass the selected user
+                    />
+                    <Button 
+                        icon={<EditOutlined />} 
+                        onClick={() => handleEdit(record.id)} 
+                    />
+                    <Button 
+                        icon={<DeleteOutlined />} 
+                        onClick={() => handleDelete(record)} 
+                        danger 
+                    />
+                </Space>
+            ),
+        },
+    ];
 
   return (
     <Space size={20} direction="vertical">
