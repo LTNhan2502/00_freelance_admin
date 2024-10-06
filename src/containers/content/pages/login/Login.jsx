@@ -5,20 +5,20 @@ import { loginAdmin } from "../../../../utils/adminAPI";
 import { Navigate, useNavigate } from "react-router-dom";
 
 function Login() {
-  const navigate = useNavigate();
-  const onFinish = async (values) => {
-    const resultLogin = await loginAdmin(values.userName, values.password);
-    console.log("Result:", resultLogin.data);
-    if (resultLogin.data && resultLogin.data.EC === 0) {
-      message.success("Đăng nhập thành công");
-      localStorage.setItem("access_token", resultLogin.data.token);
-      navigate("/");
-    } else {
-      message.error("Đăng nhập không thành công");
-    }
-    //Get api để check var
-    // console.log(values);
-  };
+    const navigate = useNavigate();
+    const onFinish = async (values) => {
+        const resultLogin = await loginAdmin(values.userName, values.password);
+        console.log("Result:", resultLogin.data);
+
+        if (resultLogin.data && resultLogin.data.EC === 0) {
+            message.success("Đăng nhập thành công");
+            localStorage.setItem("access_token_admin", resultLogin.data.token);
+            navigate("/");
+        } else {
+            message.error("Đăng nhập không thành công");
+        }
+
+};
 
   return (
     <div className="appBg">
@@ -40,7 +40,7 @@ function Login() {
               },
             ]}
           >
-            <Input placeholder="Nhập email"></Input>
+            <Input placeholder="Nhập username"></Input>
           </Form.Item>
           <Form.Item
             label="Password"

@@ -1,13 +1,14 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Dashboard from '../content/pages/Dashboard';
-import Users from '../content/pages/Users';
+import Users from '../content/pages/users/Users';
 import Products from '../content/pages/Products';
 import DetailProduct from '../content/pages/DetailProduct';
 import AddProduct from '../content/pages/AddProduct';
 import Login from '../content/pages/login/Login';
 
 function AppRoutes() {
+  const isAuthenticated = localStorage.getItem("token")
   return (
     <Routes>
         {/* Các route trong main layout */}

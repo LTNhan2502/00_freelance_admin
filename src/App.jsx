@@ -16,7 +16,7 @@ function App() {
 
   // Kiểm tra trạng thái đăng nhập khi vừa vào web
   useEffect(() => {
-    const auth = localStorage.getItem("access_token");
+    const auth = localStorage.getItem("access_token_admin");
 
     if (auth) {
       setIsAuthenticated(true);
@@ -32,8 +32,12 @@ function App() {
           {/* Main layout khi đã đăng nhập */}
           <Header />
           <Space className="sideMenuAndContent">
-            <SideMenu></SideMenu>
-            <ContentPage></ContentPage>
+            <div className="sideMenu">
+              <SideMenu />
+            </div>
+            <div className="contentPage">
+              <ContentPage />
+            </div>
           </Space>
           <Footer />
         </>

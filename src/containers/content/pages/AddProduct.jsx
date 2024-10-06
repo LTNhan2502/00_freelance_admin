@@ -1,72 +1,83 @@
 import React, { useState } from 'react';
-import { Form, Input, InputNumber, Button, Typography, message } from 'antd';
-import { addProduct } from '../../../API/api';
-import { useNavigate } from 'react-router-dom';
+import { PlusOutlined } from '@ant-design/icons';
+import { Form, Input, InputNumber, Upload, Button, message } from 'antd';
 
-const AddProduct = ({ onClose }) => {
-    const [form] = Form.useForm();
-    const [loading, setLoading] = useState(false);
-    const navigate = useNavigate()
-    const onFinish = async (values) => {
-        console.log(values);
-        
-        setLoading(true);
-        try {
-            await addProduct(values); // Gọi API để thêm sản phẩm
-            message.success('Sản phẩm đã được thêm thành công!');
-            form.resetFields();
-            // navigate('/products');
-        } catch (error) {
-            message.error('Có lỗi xảy ra khi thêm sản phẩm!');
-            console.log(error);
-            
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    return (
-        <Form
-            form={form}
-            layout="vertical"
-            onFinish={onFinish}
-        >
-            <Typography.Title level={4}>Thêm sản phẩm mới</Typography.Title>
-            <Form.Item
-                name="title"
-                label="Tên sản phẩm"
-                rules={[{ required: true, message: 'Vui lòng nhập tên sản phẩm!' }]}
-            >
-                <Input />
-            </Form.Item>
-            <Form.Item
-                name="price"
-                label="Đơn giá"
-                rules={[{ required: true, message: 'Vui lòng nhập đơn giá!' }]}
-            >
-                <InputNumber min={0} />
-            </Form.Item>
-            <Form.Item
-                name="category"
-                label="Phân loại"
-                rules={[{ required: true, message: 'Vui lòng nhập phân loại!' }]}
-            >
-                <Input />
-            </Form.Item>
-            <Form.Item
-                name="brand"
-                label="Hiệu"
-                rules={[{ required: true, message: 'Vui lòng nhập hiệu!' }]}
-            >
-                <Input />
-            </Form.Item>
-            <Form.Item>
-                <Button type="primary" htmlType="submit" loading={loading}>
-                    Thêm sản phẩm
-                </Button>
-            </Form.Item>
-        </Form>
-    );
+const normFile = (e) => {
+    if (Array.isArray(e)) {
+        return e;
+    }
+    return e?.fileList;
 };
 
-export default AddProduct;
+const beforeUpload = (file) => {
+  const isValidType = ['image/png', 'image/jpeg', 'image/webp', 'image/jpg', 'image/gif'].includes(file.type);
+  if (!isValidType) {
+    message.error('Chỉ chấp nhận các file định dạng .png, .jpeg, .webp, .jpg, .gif!');
+  }
+  // Nếu không hợp lệ, bỏ qua file upload
+  return isValidType || Upload.LIST_IGNORE; 
+};
+
+function AddProduct() {
+  // Xử lí submit form
+  const onFinish = (values) => {
+    // Post api
+    console.log('Form values: ', values);
+    message.success('Thêm mới thành công!');
+  };
+
+  return (
+    <>        
+      <Form
+        labelCol={{ span: 24 }}
+        wrapperCol={{ span: 24 }}
+        layout="vertical"
+        style={{ width: '100%', minWidth: '600px' }}
+        onFinish={onFinish}
+      >
+        <Form.Item label="Tên sản phẩm" name="input">
+          <Input />
+        </Form.Item>
+
+        <Form.Item label="Giá" name="input">
+          <Input />
+        </Form.Item>
+
+        <Form.Item label="Số lượng" name="inputNumber">
+          <InputNumber style={{ width: '100%' }} />
+        </Form.Item>
+
+        <Form.Item label="Chiết khấu" name="input">
+          <Input />
+        </Form.Item>
+
+        <Form.Item label="Hình ảnh" valuePropName="fileList" getValueFromEvent={normFile}>
+          <Upload 
+            action="/upload.do" 
+            listType="picture-card"
+            beforeUpload={beforeUpload}
+            className="upload-list-inline"
+          >
+            <button
+              style={{ border: 0, background: 'none' }}
+              type="button"
+            >
+              <PlusOutlined />
+              <div style={{ marginTop: 8 }}>Tải lên</div>
+            </button>
+          </Upload>
+        </Form.Item>
+
+        {/* Nút Thêm ở cuối form */}
+        <Form.Item wrapperCol={{ span: 24 }}>
+          <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
+            Thêm
+          </Button>
+        </Form.Item>
+
+      </Form>
+    </>
+  );
+}
+
+export default AddProduct

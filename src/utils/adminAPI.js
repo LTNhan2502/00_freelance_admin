@@ -6,4 +6,9 @@ const loginAdmin = (userName, password) => {
    return instance.post(URL_API, data);
 }
 
-export { loginAdmin }
+const getAllUsersAdmin = () => {
+   const URL_API = "/v1/api/userAdmin";
+   return instance.get(URL_API);
+}
+
+export { loginAdmin, getAllUsersAdmin }

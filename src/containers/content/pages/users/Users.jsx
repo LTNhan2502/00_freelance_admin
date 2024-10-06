@@ -1,23 +1,23 @@
 import { Space, Table, Typography, Button } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { getAllProduct } from '../../../API/api.jsx'
 import { EditOutlined, DeleteOutlined, EyeOutlined, PlusCircleOutlined } from '@ant-design/icons'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import { getAllUsersAdmin } from '../../../../utils/adminAPI.js';
 
-function Products() {
+function Users() {
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
     const [dataSource, setDataSource] = useState([])
 
     useEffect(() => {
-        getProducts();
+        getAllUsers();
     }, []);
 
 
-    const getProducts = async() => {
+    const getAllUsers = async() => {
         setLoading(true)
-        const result = await getAllProduct();
-        if(result && result.data){
+        const result = await getAllUsersAdmin();
+        if(res && res.data){
             setLoading(false)
             setDataSource(result)
         }
@@ -43,24 +43,37 @@ function Products() {
 
     const columns = [
         {
-            title: "Tên sản phẩm",
+            title: "Tên user",
             dataIndex: "title"
         },
         {
-            title: "Phân loại",
+            title: "Số dư",
             dataIndex: "category"
         },
         {
-            title: "Đơn giá",
-            dataIndex: "price"
+            title: "Yêu cầu rút tiền",
+            dataIndex: "price",
+            render: (_, { tags }) => (
+                <>
+                  {tags.map((tag) => {
+                    // tag.length > 5 sẽ phải thay bằng data (dataAPI.data.reqWithraw === true)
+                    let color = tag.length > 5 ? 'geekblue' : 'green';
+                    // tag === 'loser' sẽ phải thay bằng data (dataAPI.data.reqStatus === 'pending')
+                    if (tag === 'loser') {
+                      color = 'volcano';
+                    }
+                    return (
+                      <Tag color={color} key={tag}>
+                        {tag.toUpperCase()}
+                      </Tag>
+                    );
+                  })}
+                </>
+              ),
         },
         {
-            title: "Tồn kho",
+            title: "Phê duyệt",
             dataIndex: "stock"
-        },
-        {
-            title: "Hiệu",
-            dataIndex: "brand"
         },
         {
             title: "Action",
@@ -86,7 +99,7 @@ function Products() {
 
     return (
         <Space size={20} direction='vertical'>
-            <Typography.Title level={4}>Products</Typography.Title>
+            <Typography.Title level={4}>Users</Typography.Title>
             <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
                 <Button 
                     icon={<PlusCircleOutlined />}
@@ -106,4 +119,4 @@ function Products() {
     )
 }
 
-export default Products
+export default Users
