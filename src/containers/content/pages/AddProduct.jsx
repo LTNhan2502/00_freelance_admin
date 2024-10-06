@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Form, Input, InputNumber, Upload, Button, message } from 'antd';
+// import { CreateProduct } from '../../../utils/productAPI';
 
 const normFile = (e) => {
     if (Array.isArray(e)) {
@@ -23,6 +24,7 @@ function AddProduct() {
   const onFinish = (values) => {
     // Post api
     console.log('Form values: ', values);
+    // const result = await CreateProduct()
     message.success('Thêm mới thành công!');
   };
 

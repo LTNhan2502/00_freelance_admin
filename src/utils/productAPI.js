@@ -5,5 +5,11 @@ const getAllProduct = () => {
     return instance.get(URL_API);
 }
 
-export {getAllProduct}
- 
+
+const CreateProduct = (imageProduct, productName, price, quantity) => {
+    const URL_API = "/v1/api/product";
+    const data = { imageProduct, productName, price, quantity }
+    return instance.post(URL_API, data);
+}
+
+export { getAllProduct, CreateProduct }
