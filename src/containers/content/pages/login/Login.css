@@ -1,0 +1,27 @@
+.appBg{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('../../../../assets/img30.jpg');
+    background-size: cover;
+}
+
+.login-container{
+    margin-bottom: 9rem;
+}
+
+.text-center{
+    text-align: center;
+}
+
+.loginForm{
+    min-width: 450px;
+    padding: 0 16px 16px 16px;
+    background-color: rgba(255, 255, 255, 0.33);
+    box-shadow: 0 8px 32px 0;
+    border-radius: 20px;
+    backdrop-filter: blur(6px);
+}

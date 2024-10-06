@@ -1,4 +1,4 @@
-import { AppstoreOutlined, DashboardOutlined, UserOutlined } from '@ant-design/icons'
+import { AppstoreOutlined, DashboardOutlined, LoginOutlined, UserOutlined } from '@ant-design/icons'
 import { Menu } from 'antd'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -26,6 +26,11 @@ function SideMenu() {
                     label: "Users",
                     icon: <UserOutlined/>,
                     key: "/users"
+                },
+                {
+                    label: "Login",
+                    icon: <LoginOutlined/>,
+                    key: "/login"
                 },
             ]}>
 
