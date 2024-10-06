@@ -26,25 +26,33 @@ function AddProduct() {
     const productName = values.productName;
     const price = values.price;
     const quantity = values.quantity;
-
+    // Lấy hình ảnh
+    const imageFile = values.fileList?.[0]?.originFileObj;
+    
+    const formData = new FormData();
+    formData.append("imageProduct", imageFile);
+    formData.append("productName", productName);
+    formData.append("price", price);
+    formData.append("quantity", quantity);
 
     //Kiểm tra thêm sản phẩm ở đây
-    const formData = new FormData();
-    const imageFile = values.fileList?.[0]?.originFileObj;
     formData.append('imageProduct', imageFile);
     const imgFile = formData.get('imageProduct');
     const imageProduct = imgFile.name
     const typeQ = typeof(quantity)
     const typeP = typeof(price)
+
+    // Xem console.log tại đây
     console.log('Kiểu dữ liệu của quantity:', typeQ);
     console.log('Kiểu dữ liệu của price:', typeP);
     console.log('Name của imageProduct:', imageProduct);
     for (const [key, value] of formData.entries()) {
       console.log(`${key}:`, value);
-  }
+    }
+    
     try {
       // Gọi API với dữ liệu sản phẩm và mảng file ảnh
-      const result = await CreateProduct(imageProduct, productName, price, quantity);
+      const result = await CreateProduct(formData);
       console.log('Kết quả API:', result);
       message.success('Thêm mới thành công!');
     } catch (error) {

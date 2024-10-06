@@ -6,10 +6,13 @@ const getAllProduct = () => {
 }
 
 
-const CreateProduct = (imageProduct, productName, price, quantity) => {
+const CreateProduct = (formData) => {
     const URL_API = "/v1/api/product";
-    const data = { imageProduct, productName, price, quantity }
-    return instance.post(URL_API, data);
-}
+    return instance.post(URL_API, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+};
 
 export { getAllProduct, CreateProduct }
