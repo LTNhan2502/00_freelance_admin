@@ -23,7 +23,8 @@ function Users() {
         const usersData = await getUser();
         const result = usersData.data.data;
 
-
+        console.log(usersData.data);
+        
 
         // Handle thêm số 0 cho sđt
         if (result) {
@@ -85,6 +86,10 @@ function Users() {
 
     const columns = [
         {
+            title: "ID",
+            dataIndex: "_id",
+        },
+        {
             title: "Tên user",
             dataIndex: "userName",
         },
@@ -97,7 +102,18 @@ function Users() {
             dataIndex: "referralCode",
         },
         {
+            title: "Số dư",
+            dataIndex: "amount",
+            align: 'center'
+        },
+        {
+            title: "Gói thành viên",
+            dataIndex: "__v",
+            align: 'center'
+        },
+        {
             title: "Action",
+            align: 'right',
             render: (text, record) => (
                 <Space size="middle">
                     <Button 
