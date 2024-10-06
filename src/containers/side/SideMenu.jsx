@@ -1,4 +1,4 @@
-import { AppstoreOutlined, DashboardOutlined, LoginOutlined, UserOutlined } from '@ant-design/icons'
+import { AppstoreOutlined, DashboardOutlined, LoginOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons'
 import { Menu } from 'antd'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -26,12 +26,17 @@ function SideMenu() {
                     label: "Users",
                     icon: <UserOutlined/>,
                     key: "/users"
-                },
+                },               
                 {
-                    label: "Login",
-                    icon: <LoginOutlined/>,
-                    key: "/login"
-                },
+                    label: "Logout",
+                    icon: <LogoutOutlined />, 
+                    key: "/logout",
+                    onClick: () => {
+                        localStorage.clear(); 
+                        navigate("/login"); 
+                    }
+                }
+                
             ]}>
 
         </Menu>

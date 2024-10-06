@@ -36,7 +36,6 @@ function AddProduct() {
     const quantity = values.quantity;
     // Lấy hình ảnh
     const imageFile = values.fileList?.[0]?.originFileObj;
-    // console.log("values", values);
 
     const formData = new FormData();
     formData.append("imageProduct", imageFile.name);
@@ -46,23 +45,10 @@ function AddProduct() {
 
     //Kiểm tra thêm sản phẩm ở đây
     formData.append("imageProduct", imageFile);
-    // const imgFile = formData.get("imageProduct");
-    // const imageProduct = imgFile.name;
-    // const typeQ = typeof quantity;
-    // const typeP = typeof price;
-
-    // Xem console.log tại đây
-    // console.log("Kiểu dữ liệu của quantity:", typeQ);
-    // console.log("Kiểu dữ liệu của price:", typeP);
-    // console.log("Name của imageProduct:", imageProduct);
-    for (const [key, value] of formData.entries()) {
-      console.log(`${key}:`, value);
-    }
 
     try {
       // Gọi API với dữ liệu sản phẩm và mảng file ảnh
       const result = await CreateProduct(formData);
-      console.log("Kết quả API:", result);
       message.success("Thêm mới thành công!");
     } catch (error) {
       console.error("Lỗi khi thêm sản phẩm:", error);
