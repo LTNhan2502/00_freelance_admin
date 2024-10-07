@@ -6,6 +6,8 @@ import Products from '../content/pages/Products';
 import DetailProduct from '../content/pages/DetailProduct';
 import AddProduct from '../content/pages/AddProduct';
 import Login from '../content/pages/login/Login';
+import Membership from '../content/pages/membership/Membership';
+import AddMembership from '../content/pages/membership/AddMembership';
 
 function AppRoutes() {
   const isAuthenticated = localStorage.getItem("token")
@@ -17,6 +19,8 @@ function AppRoutes() {
         <Route path="/products/:id" element={<DetailProduct />} />
         <Route path="/products/add" element={<AddProduct />} />
         <Route path='/users' element={<Users/>}></Route>
+        <Route path='/memberships' element={<Membership/>}></Route>
+        <Route path='/memberships/add' element={<AddMembership/>}></Route>
 
         {/* Route login */}
         <Route path='/login' element={<Login/>}></Route>

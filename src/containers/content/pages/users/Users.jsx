@@ -38,19 +38,16 @@ function Users() {
         const result = usersData.data.data;
         console.log(result);
         
-
-
-
-    // Handle thêm số 0 cho sđt
-    if (result) {
-      const modifiedData = result.map((item) => ({
-        ...item,
-        numberPhone: "0" + item.numberPhone,
-      }));
-      setDataSource(modifiedData);
-    }
-    setLoading(false);
-  };
+        // Handle thêm số 0 cho sđt
+        if (result) {
+            const modifiedData = result.map((item) => ({
+                ...item,
+                numberPhone: "0" + item.numberPhone,
+            }));
+            setDataSource(modifiedData);
+        }
+        setLoading(false);
+    };
 
   const handleEdit = (id) => {
     console.log();
@@ -149,44 +146,44 @@ function Users() {
 
   return (
     <Space size={20} direction="vertical">
-      <Typography.Title level={4}>Users</Typography.Title>
-      <div
-        style={{ display: "flex", justifyContent: "flex-end", width: "100%" }}
-      >
-        <Button
-          icon={<PlusCircleOutlined />}
-          size="large"
-          onClick={handleCreate}
+        <Typography.Title level={4}>Users</Typography.Title>
+        <div
+            style={{ display: "flex", justifyContent: "flex-end", width: "100%" }}
         >
-          Thêm User
-        </Button>
-      </div>
-      <Table
-        columns={columns}
-        dataSource={dataSource}
-        loading={loading}
-        rowKey="_id"
-      />
-
-      {/* Modal nạp tiền */}
-      <Modal
-        title={`Thông tin nạp tiền của ${selectedUser?.userName}`} // Hiển thị tên user trong tiêu đề modal
-        visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <div>
-          <Form form={form} onFinish={onFinish}>
-            <Form.Item
-              name="amount"
-              label="Số tiền nạp"
-              rules={[{ required: true, message: "Vui lòng nhập số tiền!" }]}
+            <Button
+                icon={<PlusCircleOutlined />}
+                size="large"
+                onClick={handleCreate}
             >
-              <Input type="number" placeholder="Nhập số tiền" />
-            </Form.Item>
-          </Form>
+                Thêm User
+            </Button>
         </div>
-      </Modal>
+        <Table
+            columns={columns}
+            dataSource={dataSource}
+            loading={loading}
+            rowKey="_id"
+        />
+
+        {/* Modal nạp tiền */}
+        <Modal
+            title={`Thông tin nạp tiền của ${selectedUser?.userName}`} // Hiển thị tên user trong tiêu đề modal
+            visible={isModalVisible}
+            onOk={handleOk}
+            onCancel={handleCancel}
+        >
+            <div>
+                <Form form={form} onFinish={onFinish}>
+                    <Form.Item
+                        name="amount"
+                        label="Số tiền nạp"
+                        rules={[{ required: true, message: "Vui lòng nhập số tiền!" }]}
+                    >
+                        <Input type="number" placeholder="Nhập số tiền" />
+                    </Form.Item>
+                </Form>
+            </div>
+        </Modal>
     </Space>
   );
 }
