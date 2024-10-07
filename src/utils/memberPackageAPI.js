@@ -11,4 +11,10 @@ const CreateMemberPackage = (packageName, price, distribution, discountFrom, dis
    return instance.post(URL_API, data);
 };
 
-export { getAllMemberPackage, CreateMemberPackage }
+const DeleteMemberPackage = (memberId) => {
+   const URL_API = "/v1/api/member";
+   const data = { memberId }
+   return instance.delete(URL_API, data);
+};
+
+export { getAllMemberPackage, CreateMemberPackage, DeleteMemberPackage }
