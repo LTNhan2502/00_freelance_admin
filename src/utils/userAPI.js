@@ -7,7 +7,7 @@ const getUser = () => {
 
 // Update amout user
 const updateAmountUser = (userId, amount) => {
-   const URL_API = "/v1/api/user";
+   const URL_API = "/v1/api/update-amount";
    const data = { userId, amount }
    return instance.post(URL_API, data);
 }

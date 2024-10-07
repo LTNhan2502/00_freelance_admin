@@ -36,6 +36,8 @@ function Users() {
         setLoading(true);
         const usersData = await getUser();
         const result = usersData.data.data;
+        console.log(result);
+        
 
 
 
@@ -82,17 +84,19 @@ function Users() {
     const { amount } = values;
     const userId = selectedUser._id;
     try {
-      const response = await updateAmountUser(userId, amount);
-      console.log(response);
+        const response = await updateAmountUser(userId, amount);
+        console.log(response);
 
-      console.log(userId);
-      console.log(amount);
-      message.success(`Nạp tiền thành công cho ${selectedUser.userName}!`);
-      setIsModalVisible(false);
-      form.resetFields();
+        console.log(userId);
+        console.log(amount);
+        message.success(`Nạp tiền thành công cho ${selectedUser.userName}!`);
+        setIsModalVisible(false);
+        form.resetFields();
     } catch (error) {
-      console.log(error);
-      message.error("Có lỗi xảy ra, vui lòng thử lại!");
+        console.log(error);
+        console.log(userId);
+        console.log(amount);
+        message.error("Có lỗi xảy ra, vui lòng thử lại!");
     }
   };
 
@@ -107,11 +111,19 @@ function Users() {
         },
         {
             title: "Số điện thoại",
-            dataIndex: "numberPhone",  // Use the modified 'numberPhone' from the state
+            dataIndex: "numberPhone",
         },
         {
             title: "Mã giới thiệu",
             dataIndex: "referralCode",
+        },
+        {
+            title: "Số dư tài khoản",
+            dataIndex: "amount",
+        },
+        {
+            title: "Gói",
+            dataIndex: "__v",
         },
         {
             title: "Action",
@@ -119,7 +131,7 @@ function Users() {
                 <Space size="middle">
                     <Button 
                         icon={<PlusOutlined />} 
-                        onClick={() => showModal(record)}  // Show modal when clicked, pass the selected user
+                        onClick={() => showModal(record)}
                     />
                     <Button 
                         icon={<EditOutlined />} 
@@ -153,10 +165,10 @@ function Users() {
         columns={columns}
         dataSource={dataSource}
         loading={loading}
-        rowKey="id"
+        rowKey="_id"
       />
 
-      {/* Modal implementation */}
+      {/* Modal nạp tiền */}
       <Modal
         title={`Thông tin nạp tiền của ${selectedUser?.userName}`} // Hiển thị tên user trong tiêu đề modal
         visible={isModalVisible}
