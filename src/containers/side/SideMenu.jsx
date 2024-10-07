@@ -30,10 +30,10 @@ function SideMenu() {
                 {
                     label: "Logout",
                     icon: <LogoutOutlined />, 
-                    key: "/logout",
                     onClick: () => {
                         localStorage.clear(); 
                         navigate("/login"); 
+                        window.location.reload();
                     }
                 }
                 

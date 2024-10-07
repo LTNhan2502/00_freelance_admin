@@ -8,21 +8,17 @@ import AddProduct from '../content/pages/AddProduct';
 import Login from '../content/pages/login/Login';
 
 function AppRoutes() {
-  const isAuthenticated = localStorage.getItem("token")
   return (
     <Routes>
-        {/* Các route trong main layout */}
-        <Route path='/' element={<Dashboard/>}></Route>
-        <Route path='/products' element={<Products/>}></Route>
-        <Route path="/products/:id" element={<DetailProduct />} />
-        <Route path="/products/add" element={<AddProduct />} />
-        <Route path='/users' element={<Users/>}></Route>
+      {/* Các route trong main layout chỉ xuất hiện khi đã đăng nhập */}
+      <Route path="/" element={<Dashboard />} />
+      <Route path="/products" element={<Products />} />
+      <Route path="/products/:id" element={<DetailProduct />} />
+      <Route path="/products/add" element={<AddProduct />} />
+      <Route path="/users" element={<Users />} />
 
-        {/* Route login */}
-        <Route path='/login' element={<Login/>}></Route>
-
-        {/* Route không phù hợp */}
-        <Route path='*' element={<Login/>}></Route>
+      {/* Route login nằm ngoài layout */}
+      <Route path="/login" element={<Login />} />
     </Routes>
   )
 }
