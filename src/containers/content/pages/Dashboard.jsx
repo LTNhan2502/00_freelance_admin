@@ -47,66 +47,64 @@ function Dashboard() {
 
 
 const RecentProduct = () => {
-  const [dataSource, setDataSource] = useState([])
-  const [loading, setLoading] = useState(false)
+  const baseURL = "v1/api/get-image/"; // Đường dẫn cơ sở
+  const [dataSource, setDataSource] = useState([]);
+  const [loading, setLoading] = useState(false);
   
   useEffect(() => {
-    fetcRecentProduct()
+    fetcRecentProduct();
   }, []);
-  
+
   const fetcRecentProduct = async () => {
-    setLoading(true)
+    setLoading(true);
     const getRecentProduct = await getTwoProductNew();
-    const result = getRecentProduct.data.data
-    console.log(result);
-    
-    if(result && getRecentProduct.data.data){
-      setLoading(false)
-      setDataSource(result)
+    const result = getRecentProduct.data.data;
+
+    if (result && getRecentProduct.data.data) {
+      setLoading(false);
+      setDataSource(result);
     }
-  }
-  
-  return(
+  };
+
+  return (
     <>
       <Typography.Text>Các sản phẩm gần đây</Typography.Text>
       <Table
         columns={[
-          // {
-          //   title: "Hình ảnh",
-          //   dataIndex: "imageProduct",
-          //   render: (text, record) => (
-          //     <img 
-          //       src={record.imageProduct} 
-          //       alt={record.productName} 
-          //       style={{ width: 50, height: 50, objectFit: 'cover' }} 
-          //     />
-          //   ),
-          // },
+          {
+            title: "Hình ảnh",
+            dataIndex: "imageProduct",
+            render: (text, record) => (
+              <img 
+                src={`${baseURL}${record.imageProduct}`}
+                alt={record.productName} 
+                style={{ width: 50, height: 50, objectFit: 'cover' }} 
+              />
+            ),
+          },
           {
             title: "Tên sản phẩm",
-            dataIndex: 'productName'
+            dataIndex: 'productName',
           },
           {
             title: "Đơn giá",
             dataIndex: 'price',
-            align: 'center'
+            align: 'center',
           },
           {
             title: "Số lượng",
             dataIndex: "quantity",
-            align: 'center'
+            align: 'center',
           },
-          
         ]}
         loading={loading}
         dataSource={dataSource}
         rowKey="_id"
-        >
-
-      </Table>
+      />
     </>
-  )
-}
+  );
+};
+
 
 const DashboardCard = ({title, value, icon}) => {
   return(
