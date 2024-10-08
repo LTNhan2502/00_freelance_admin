@@ -2,7 +2,7 @@ import { ProductOutlined, UserOutlined } from '@ant-design/icons'
 import { Card, Space, Statistic, Table, Typography } from 'antd'
 import React, { useEffect, useState } from 'react'
 import './Dashboard.css'
-import { getRecentProduct } from '../../../API/api'
+import { getTwoProductNew } from '../../../utils/productAPI'
 
 function Dashboard() {
   return (
@@ -45,6 +45,69 @@ function Dashboard() {
   )
 }
 
+
+const RecentProduct = () => {
+  const [dataSource, setDataSource] = useState([])
+  const [loading, setLoading] = useState(false)
+  
+  useEffect(() => {
+    fetcRecentProduct()
+  }, []);
+  
+  const fetcRecentProduct = async () => {
+    setLoading(true)
+    const getRecentProduct = await getTwoProductNew();
+    const result = getRecentProduct.data.data
+    console.log(result);
+    
+    if(result && getRecentProduct.data.data){
+      setLoading(false)
+      setDataSource(result)
+    }
+  }
+  
+  return(
+    <>
+      <Typography.Text>Các sản phẩm gần đây</Typography.Text>
+      <Table
+        columns={[
+          // {
+          //   title: "Hình ảnh",
+          //   dataIndex: "imageProduct",
+          //   render: (text, record) => (
+          //     <img 
+          //       src={record.imageProduct} 
+          //       alt={record.productName} 
+          //       style={{ width: 50, height: 50, objectFit: 'cover' }} 
+          //     />
+          //   ),
+          // },
+          {
+            title: "Tên sản phẩm",
+            dataIndex: 'productName'
+          },
+          {
+            title: "Đơn giá",
+            dataIndex: 'price',
+            align: 'center'
+          },
+          {
+            title: "Số lượng",
+            dataIndex: "quantity",
+            align: 'center'
+          },
+          
+        ]}
+        loading={loading}
+        dataSource={dataSource}
+        rowKey="_id"
+        >
+
+      </Table>
+    </>
+  )
+}
+
 const DashboardCard = ({title, value, icon}) => {
   return(
     <Card className='dashboard-card'>
@@ -53,53 +116,6 @@ const DashboardCard = ({title, value, icon}) => {
         <Statistic title={title} value={value}/>
       </Space>
     </Card>
-  )
-}
-
-const RecentProduct = () => {
-  const [dataSource, setDataSource] = useState([])
-  const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    setLoading(true);
-    getRecentProduct().then((res) => {
-      // Chuyển đối tượng sản phẩm thành mảng để sử dụng trong bảng
-      const productData = [res];
-      
-      setDataSource(productData);
-      setLoading(false);
-    });
-  }, []);
-
-  return(
-    <>
-      <Typography.Text>Các sản phẩm gần đây</Typography.Text>
-      <Table
-        columns={[
-          {
-            title: "Title",
-            dataIndex: 'title'
-          },
-          {
-            title: "Price",
-            dataIndex: 'price'
-          },
-          {
-            title: "Discount Percentage",
-            dataIndex: "discountPercentage"
-          },
-          {
-            title: "Brand",
-            dataIndex: "brand"
-          },
-        ]}
-        loading={loading}
-        dataSource={dataSource}
-        rowKey="id"
-      >
-
-      </Table>
-    </>
   )
 }
 
