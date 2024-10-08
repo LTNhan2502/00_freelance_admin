@@ -50,21 +50,24 @@ function Dashboard() {
   );
 }
 
-const fetchImage = async (imageName) => {
-  try {
-    const result = await getImages(imageName); // Sử dụng await
-    console.log("Hình ảnh: ", result); // Kiểm tra dữ liệu từ response
-  } catch (error) {
-    console.error("Lỗi khi lấy hình ảnh:", error);
-  }
-};
-
-fetchImage("abc.png");
-
 const RecentProduct = () => {
-  const baseURL = "v1/api/get-image/"; // Đường dẫn cơ sở
   const [dataSource, setDataSource] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const fetchImage = async (imageName) => {
+    try {
+      const result = await getImages(imageName);
+      const imageUrl = URL.createObjectURL(result.data); // Tạo URL từ blob
+      console.log("Hình ảnh: ", imageUrl);
+
+      // Tạo thẻ img để hiển thị hình ảnh
+      const img = document.createElement("img");
+      img.src = imageUrl;
+      document.body.appendChild(img);
+    } catch (error) {
+      console.error("Lỗi khi lấy hình ảnh:", error);
+    }
+  };
 
   useEffect(() => {
     fetcRecentProduct();
@@ -91,7 +94,7 @@ const RecentProduct = () => {
             dataIndex: "imageProduct",
             render: (text, record) => (
               <img
-                src={`${baseURL}${record.imageProduct}`}
+                src={fetchImage(record.imageProduct)}
                 alt={record.productName}
                 style={{ width: 50, height: 50, objectFit: "cover" }}
               />
