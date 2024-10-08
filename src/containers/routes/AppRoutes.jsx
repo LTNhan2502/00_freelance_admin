@@ -10,7 +10,6 @@ import Membership from '../content/pages/membership/Membership';
 import AddMembership from '../content/pages/membership/AddMembership';
 
 function AppRoutes() {
-  const isAuthenticated = localStorage.getItem("token")
   return (
     <Routes>
         {/* Các route trong main layout */}
@@ -22,11 +21,8 @@ function AppRoutes() {
         <Route path='/memberships' element={<Membership/>}></Route>
         <Route path='/memberships/add' element={<AddMembership/>}></Route>
 
-        {/* Route login */}
-        <Route path='/login' element={<Login/>}></Route>
-
-        {/* Route không phù hợp */}
-        <Route path='*' element={<Login/>}></Route>
+      {/* Route login nằm ngoài layout */}
+      <Route path="/login" element={<Login />} />
     </Routes>
   )
 }
