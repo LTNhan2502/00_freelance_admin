@@ -52,22 +52,21 @@ function Dashboard() {
 
 const RecentProduct = () => {
   const [dataSource, setDataSource] = useState([]);
+  const [imageURLs, setImageURLs] = useState({});
   const [loading, setLoading] = useState(false);
 
+  // Hàm fetch hình ảnh và lưu URL vào state
   const fetchImage = async (imageName) => {
     try {
       const result = await getImages(imageName);
       const imageUrl = URL.createObjectURL(result.data); // Tạo URL từ blob
-      console.log("Hình ảnh: ", imageUrl);
-
-      // Tạo thẻ img để hiển thị hình ảnh
-      const img = document.createElement("img");
-      img.src = imageUrl;
-      document.body.appendChild(img);
+      return imageUrl; // Chỉ trả về URL mà không tạo thẻ img
     } catch (error) {
       console.error("Lỗi khi lấy hình ảnh:", error);
+      return null;
     }
   };
+  
 
   useEffect(() => {
     fetcRecentProduct();
@@ -79,8 +78,19 @@ const RecentProduct = () => {
     const result = getRecentProduct.data.data;
 
     if (result && getRecentProduct.data.data) {
-      setLoading(false);
       setDataSource(result);
+
+      // Fetch hình ảnh cho mỗi sản phẩm và lưu URL vào state
+      const imageFetchPromises = result.map(async (product) => {
+        const imageUrl = await fetchImage(product.imageProduct);
+        return { [product._id]: imageUrl }; // Sử dụng product._id làm key
+      });
+
+      const imageResults = await Promise.all(imageFetchPromises);
+      const imagesMap = Object.assign({}, ...imageResults); // Tạo object chứa image URLs
+      setImageURLs(imagesMap);
+
+      setLoading(false);
     }
   };
 
@@ -91,10 +101,10 @@ const RecentProduct = () => {
         columns={[
           {
             title: "Hình ảnh",
-            dataIndex: "imageProduct",
+            dataIndex: "_id",
             render: (text, record) => (
               <img
-                src={fetchImage(record.imageProduct)}
+                src={imageURLs[record._id]} // Sử dụng URL hình ảnh từ state
                 alt={record.productName}
                 style={{ width: 50, height: 50, objectFit: "cover" }}
               />
