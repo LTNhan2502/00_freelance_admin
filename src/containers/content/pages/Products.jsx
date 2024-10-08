@@ -94,7 +94,7 @@ function Products() {
       align: "center",
     },
     {
-      title: "Đơn giá",
+      title: "Đơn giá (€)",
       dataIndex: "price",
       align: "center",
     },

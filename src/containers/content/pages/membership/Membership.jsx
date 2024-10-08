@@ -42,7 +42,7 @@ function Membership() {
         align: 'center',
       },
       {
-        title: "Chiết khấu",
+        title: "Chiết khấu (%)",
         align: 'center',
         render: (text, record) => `${record.discountFrom} - ${record.discountTo}`,
       },

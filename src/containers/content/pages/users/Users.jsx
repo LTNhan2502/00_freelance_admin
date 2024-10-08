@@ -115,7 +115,7 @@ function Users() {
             dataIndex: "referralCode",
         },
         {
-            title: "Số dư tài khoản",
+            title: "Số dư tài khoản (€)",
             dataIndex: "amount",
             align: "center"
         },
