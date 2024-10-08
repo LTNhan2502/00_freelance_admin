@@ -109,6 +109,7 @@ function Membership() {
                 dataSource={dataSource}
                 loading={loading}
                 rowKey="_id"
+                pagination={{ pageSize: 5 }}
             ></Table>
         </Space>
     );

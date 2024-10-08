@@ -91,18 +91,22 @@ function Products() {
     {
       title: "Số lượng",
       dataIndex: "quantity",
+      align: "center",
     },
     {
       title: "Đơn giá",
       dataIndex: "price",
+      align: "center",
     },
     {
       title: "Trạng thái",
-      dataIndex: "stock",
+      dataIndex: "status",
+      align: "center",
     },
     {
       title: "User sở hữu",
-      dataIndex: "brand",
+      dataIndex: "userName",
+      align: "center",
     },
     {
       title: "Action",
@@ -130,7 +134,13 @@ function Products() {
           onClick={() => handleCreate()}
         ></Button>
       </div>
-      <Table columns={columns} dataSource={dataSource} loading={loading} rowKey="id" />
+      <Table 
+        columns={columns} 
+        dataSource={dataSource} 
+        loading={loading} 
+        rowKey="id" 
+        pagination={{ pageSize: 5 }}
+      />
     </Space>
   );
 }

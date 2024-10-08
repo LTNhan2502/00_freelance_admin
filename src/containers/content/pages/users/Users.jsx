@@ -117,6 +117,7 @@ function Users() {
         {
             title: "Số dư tài khoản",
             dataIndex: "amount",
+            align: "center"
         },
         {
             title: "Gói",
@@ -163,6 +164,7 @@ function Users() {
             dataSource={dataSource}
             loading={loading}
             rowKey="_id"
+            pagination={{ pageSize: 5 }}
         />
 
         {/* Modal nạp tiền */}
