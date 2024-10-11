@@ -1,6 +1,6 @@
 import { Space, Table, Typography, Button, Modal, Input, Form, message} from "antd";
 import React, { useEffect, useState } from "react";
-import { EditOutlined, DeleteOutlined, PlusOutlined, PlusCircleOutlined} from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined, PlusOutlined, PlusCircleOutlined, BellOutlined} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { getUser, updateAmountUser } from "../../../../utils/userAPI";
 import { getBankByUserId } from "../../../../utils/bank";
@@ -48,10 +48,14 @@ function Users() {
     }
   
     const handleEdit = async(user) => {
-        setSelectedUser(user);
-        // Mỗi lần nhấn mở edit thì sẽ gọi lại api này và set lại giá trị cho state
-        await getAllUsersBank(user._id)
-        setIsEditModalVisible(true);
+        if (user.withrawReq === true) {
+            setSelectedUser(user);
+            // Mỗi lần nhấn mở edit thì sẽ gọi lại api này và set lại giá trị cho state
+            await getAllUsersBank(user._id);
+            setIsEditModalVisible(true);
+        } else {
+            message.info("Không có yêu cầu rút tiền nào");
+        }
     };
   
     const handleDelete = (record) => {
@@ -140,7 +144,7 @@ function Users() {
                 <Space size="middle">
                     <Button icon={<PlusOutlined />} onClick={() => showModal(record)} />
                     <Button
-                        icon={<EditOutlined />}
+                        icon={<BellOutlined />}
                         onClick={() => handleEdit(record)}
                     />
                     <Button
