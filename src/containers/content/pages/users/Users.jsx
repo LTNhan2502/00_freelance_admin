@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { EditOutlined, DeleteOutlined, PlusOutlined, PlusCircleOutlined, BellOutlined} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { getUser, updateAmountUser } from "../../../../utils/userAPI";
-import { getBankByUserId } from "../../../../utils/bank";
+import { getAllHistoryBank, getBankByUserId } from "../../../../utils/bank";
   
 function Users() {
     const navigate = useNavigate();
@@ -12,11 +12,15 @@ function Users() {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
     const [userBankInfo, setUserBankInfo] = useState(null)
+    const [userBankHistory, setUserBankHistory] = useState(null);
+    const [moneyOut, setMoneyOut] = useState(0);
+    const [deposit, setDeposit] = useState(0);
     const [selectedUser, setSelectedUser] = useState(null);
     const [form] = Form.useForm();
   
     useEffect(() => {
         getAllUsers();
+        getAllHistoryMoney()
     }, []);
   
     // Fetch users API
@@ -46,12 +50,46 @@ function Users() {
             setUserBankInfo(result);
         }
     }
+
+    // Fetch all history bank
+    const getAllHistoryMoney = async() => {
+        const res = await getAllHistoryBank()
+        const result = res.data.data 
+        
+        if(result && res.data.data){
+            setUserBankHistory(result)
+            console.log(userBankHistory);            
+        }
+    }
   
-    const handleEdit = async(user) => {
-        if (user.withrawReq === true) {
+    const handleDeposit = async(user) => {
+        const selectedUserHistory = userBankHistory.find((userHistory) => user._id === userHistory.userId && userHistory.statusDeposit === "waiting")
+        console.log(selectedUserHistory);
+        
+        if (selectedUserHistory) {
             setSelectedUser(user);
-            // Mỗi lần nhấn mở edit thì sẽ gọi lại api này và set lại giá trị cho state
+            // Mỗi lần nhấn mở modal nạp tiền thì sẽ gọi lại api này và set lại giá trị cho state
+            // Để modal có thể nhận dữ liệu đúng
             await getAllUsersBank(user._id);
+
+            setDeposit(selectedUserHistory.deposit)
+            setIsModalVisible(true);
+        } else {
+            message.info("Không có yêu cầu nạp tiền nào");
+        }
+    };
+
+    const handleWithdraw = async(user) => {
+        const selectedUserHistory = userBankHistory.find((userHistory) => user._id === userHistory.userId && userHistory.statusWithdraw === "waiting")
+        console.log(selectedUserHistory);
+        
+        if (selectedUserHistory) {
+            setSelectedUser(user);
+            // Mỗi lần nhấn mở modal rút tiền thì sẽ gọi lại api này và set lại giá trị cho state
+            // Để modal có thể nhận dữ liệu đúng
+            await getAllUsersBank(user._id);
+            
+            setMoneyOut(selectedUserHistory.moneyOut)
             setIsEditModalVisible(true);
         } else {
             message.info("Không có yêu cầu rút tiền nào");
@@ -63,49 +101,52 @@ function Users() {
         // Gọi api delete
     };
   
-    // Handle show modal nạp tiền
-    const showModal = (user) => {
-        setSelectedUser(user);
-        setIsModalVisible(true);
-    };
-  
-    const handleOk = () => {
-        form.submit();
-    };
-  
     const handleCancel = () => {
         setIsModalVisible(false);
-        form.resetFields();
     };
   
     const handleEditCancel = () => {
         setIsEditModalVisible(false);
     };
   
-    // Hanlde nạp tiền
-    const onFinish = async (values) => {
-        const { amount } = values;
-        const userId = selectedUser._id;
-        try {
-            const response = await updateAmountUser(userId, amount);
-            console.log(response);
-            message.success(`Nạp tiền thành công cho ${selectedUser.userName}!`);
-            setIsModalVisible(false);
-            form.resetFields();
-        } catch (error) {
-            console.log(error);
-            message.error("Có lỗi xảy ra, vui lòng thử lại!");
-        }
+    // // Hanlde nạp tiền
+    // const onFinish = async (values) => {
+    //     const { amount } = values;
+    //     const userId = selectedUser._id;
+    //     try {
+    //         const response = await updateAmountUser(userId, amount);
+    //         console.log(response);
+    //         message.success(`Nạp tiền thành công cho ${selectedUser.userName}!`);
+    //         setIsModalVisible(false);
+    //         form.resetFields();
+    //     } catch (error) {
+    //         console.log(error);
+    //         message.error("Có lỗi xảy ra, vui lòng thử lại!");
+    //     }
+    // };
+  
+    // Chấp nhận yêu cầu nạt tiền
+    const handleAcceptDeposit = () => {
+        // Gọi api cập nhật lại số dư user
+        setIsModalVisible(false);
+        message.success(`Chấp nhận yêu cầu nạt tiền cho ${selectedUser.userName}`);
     };
   
+    // Từ chối yêu cầu nạt tiền
+    const handleRejectDeposit = () => {
+        setIsEditModalVisible(false);
+        message.error(`Từ chối yêu cầu nạt tiền của ${selectedUser.userName}`);
+    };
+
     // Chấp nhận yêu cầu rút tiền
-    const handleAcceptRequest = () => {
+    const handleAcceptWithdraw = () => {
+        // Gọi api cập nhật lại số dư user
         setIsEditModalVisible(false);
         message.success(`Chấp nhận yêu cầu rút tiền cho ${selectedUser.userName}`);
     };
   
     // Từ chối yêu cầu rút tiền
-    const handleRejectRequest = () => {
+    const handleRejectWithdraw = () => {
         setIsEditModalVisible(false);
         message.error(`Từ chối yêu cầu rút tiền của ${selectedUser.userName}`);
     };
@@ -142,11 +183,19 @@ function Users() {
             align: "right",
             render: (text, record) => (
                 <Space size="middle">
-                    <Button icon={<PlusOutlined />} onClick={() => showModal(record)} />
+                    {/* Nạp tiền */}
+                    <Button 
+                        icon={<PlusOutlined />} 
+                        onClick={() => handleDeposit(record)} 
+                    />
+
+                    {/* Rút tiền */}
                     <Button
                         icon={<BellOutlined />}
-                        onClick={() => handleEdit(record)}
+                        onClick={() => handleWithdraw(record)}
                     />
+
+                    {/* Xoá */}
                     <Button
                         icon={<DeleteOutlined />}
                         onClick={() => handleDelete(record)}
@@ -181,20 +230,19 @@ function Users() {
             <Modal
                 title={`Thông tin nạp tiền của ${selectedUser?.userName}`}
                 visible={isModalVisible}
-                onOk={handleOk}
                 onCancel={handleCancel}
+                footer={[
+                    <Button key="reject" onClick={handleRejectDeposit}>
+                        Từ chối
+                    </Button>,
+                    <Button key="accept" type="primary" onClick={handleAcceptDeposit}>
+                        Chấp nhận
+                    </Button>,
+                ]}
             >
-                <div>
-                    <Form form={form} onFinish={onFinish}>
-                        <Form.Item
-                            name="amount"
-                            label="Số tiền nạp"
-                            rules={[{ required: true, message: "Vui lòng nhập số tiền!" }]}
-                        >
-                            <Input type="number" placeholder="Nhập số tiền" />
-                        </Form.Item>
-                    </Form>
-                </div>
+                <p>Ngân hàng: {userBankInfo?.nameBank || "Chưa có"}</p>
+                <p>Số tài khoản: {userBankInfo?.numberBank || "Chưa có"}</p>
+                <p>Số tiền yêu cầu nạp: {`${deposit} €` || "Chưa có"}</p>
             </Modal>
     
             {/* Modal xử lý yêu cầu rút tiền */}
@@ -203,17 +251,17 @@ function Users() {
                 visible={isEditModalVisible}
                 onCancel={handleEditCancel}
                 footer={[
-                    <Button key="reject" onClick={handleRejectRequest}>
+                    <Button key="reject" onClick={handleRejectWithdraw}>
                         Từ chối
                     </Button>,
-                    <Button key="accept" type="primary" onClick={handleAcceptRequest}>
+                    <Button key="accept" type="primary" onClick={handleAcceptWithdraw}>
                         Chấp nhận
                     </Button>,
                 ]}
             >
                 <p>Ngân hàng: {userBankInfo?.nameBank || "Chưa có"}</p>
                 <p>Số tài khoản: {userBankInfo?.numberBank || "Chưa có"}</p>
-                <p>Số tiền yêu cầu rút: {selectedUser?.moneyOut || "Chưa có"}</p>
+                <p>Số tiền yêu cầu rút: {`${moneyOut} €` || "Chưa có"}</p>
             </Modal>
         </Space>
     );

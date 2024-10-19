@@ -6,4 +6,9 @@ const getBankByUserId = (userId) => {
     return instance.post(URL_API, data);
 }
 
-export { getBankByUserId }
+const getAllHistoryBank = () => {
+    const URL_API = "/v1/api/history_money";
+    return instance.get(URL_API);
+}
+
+export { getBankByUserId, getAllHistoryBank }
