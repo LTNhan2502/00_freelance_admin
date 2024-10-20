@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { EditOutlined, DeleteOutlined, PlusOutlined, PlusCircleOutlined, BellOutlined} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { getUser, updateAmountUser } from "../../../../utils/userAPI";
-import { getAllHistoryBank, getBankByUserId } from "../../../../utils/bank";
+import { getAllHistoryBank, getBankByUserId, updateAmountDeposit } from "../../../../utils/bank";
   
 function Users() {
     const navigate = useNavigate();
@@ -125,22 +125,52 @@ function Users() {
     //     }
     // };
   
-    // Chấp nhận yêu cầu nạt tiền
-    const handleAcceptDeposit = () => {
-        // Gọi api cập nhật lại số dư user
-        setIsModalVisible(false);
-        message.success(`Chấp nhận yêu cầu nạt tiền cho ${selectedUser.userName}`);
+    // Chấp nhận yêu cầu nạp tiền
+    const handleAcceptDeposit = async(userId, deposit) => {
+        const statusDeposit = "success"
+
+        try {
+            // Gọi api cập nhật lại số dư user
+            const acceptDeposit = await updateAmountDeposit(userId, statusDeposit, deposit)            
+
+            if(acceptDeposit){
+                setIsModalVisible(false);
+                message.success(`Chấp nhận yêu cầu nạt tiền cho ${selectedUser.userName}`);
+            }else{
+                message.error("Có lỗi xảy ra")
+            }            
+        } catch (error) {
+            console.log(error);   
+        }
     };
   
-    // Từ chối yêu cầu nạt tiền
-    const handleRejectDeposit = () => {
-        setIsEditModalVisible(false);
-        message.error(`Từ chối yêu cầu nạt tiền của ${selectedUser.userName}`);
+    // Từ chối yêu cầu nạp tiền
+    const handleRejectDeposit = async(userId, deposit) => {
+        const statusDeposit = "cancel"
+
+        try {
+            // Gọi api cập nhật lại số dư user
+            const rejectDeposit = await updateAmountDeposit(userId, statusDeposit, deposit)
+            
+            if(rejectDeposit){
+                setIsModalVisible(false);
+                message.error(`Từ chối yêu cầu nạt tiền của ${selectedUser.userName}`);
+            }else{
+                message.error("Có lỗi xảy ra")
+            }
+        } catch (error) {
+            console.log(error);
+            
+        }
+
     };
 
     // Chấp nhận yêu cầu rút tiền
-    const handleAcceptWithdraw = () => {
+    const handleAcceptWithdraw = (userId, moneyOut) => {
         // Gọi api cập nhật lại số dư user
+        console.log(userId, moneyOut);
+        return;
+        
         setIsEditModalVisible(false);
         message.success(`Chấp nhận yêu cầu rút tiền cho ${selectedUser.userName}`);
     };
@@ -235,7 +265,7 @@ function Users() {
                     <Button key="reject" onClick={handleRejectDeposit}>
                         Từ chối
                     </Button>,
-                    <Button key="accept" type="primary" onClick={handleAcceptDeposit}>
+                    <Button key="accept" type="primary" onClick={() => handleAcceptDeposit(selectedUser?._id, deposit)}>
                         Chấp nhận
                     </Button>,
                 ]}
@@ -254,7 +284,7 @@ function Users() {
                     <Button key="reject" onClick={handleRejectWithdraw}>
                         Từ chối
                     </Button>,
-                    <Button key="accept" type="primary" onClick={handleAcceptWithdraw}>
+                    <Button key="accept" type="primary" onClick={() => handleAcceptWithdraw(selectedUser?._id, moneyOut)}>
                         Chấp nhận
                     </Button>,
                 ]}

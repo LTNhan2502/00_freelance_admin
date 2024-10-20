@@ -11,4 +11,10 @@ const getAllHistoryBank = () => {
     return instance.get(URL_API);
 }
 
-export { getBankByUserId, getAllHistoryBank }
+const updateAmountDeposit = (userId, statusDeposit, deposit) => {
+    const URL_API = "/v1/api/update-amout-deposit";
+    const data = { userId, statusDeposit, deposit };
+    return instance.post(URL_API, data);
+}
+
+export { getBankByUserId, getAllHistoryBank, updateAmountDeposit }
