@@ -1,9 +1,10 @@
 import { Button, Form, Input, InputNumber, message } from 'antd'
 import React from 'react'
 import { CreateMemberPackage } from '../../../../utils/memberPackageAPI'
+import { useNavigate } from 'react-router-dom';
 
 function AddMembership() {
-
+    const navigate = useNavigate()
     // Xử lí submit form
     const onFinish = async (values) => {
         // Lấy thông tin từ form
@@ -14,12 +15,13 @@ function AddMembership() {
         const discountTo = values.discountTo;
 
         try {
-        // Gọi API với dữ liệu sản phẩm và mảng file ảnh
-        const result = await CreateMemberPackage(packageName, price, distribution, discountFrom, discountTo);
-        message.success("Thêm mới thành công!");
+            // Gọi API với dữ liệu sản phẩm và mảng file ảnh
+            const result = await CreateMemberPackage(packageName, price, distribution, discountFrom, discountTo);
+            message.success("Thêm mới thành công!");
+            navigate("/memberships")
         } catch (error) {
-        console.error("Lỗi khi thêm sản phẩm:", error);
-        message.error("Thêm mới thất bại!");
+            console.error("Lỗi khi thêm sản phẩm:", error);
+            message.error("Thêm mới thất bại!");
         }
     };
     
