@@ -104,18 +104,26 @@ function Users() {
 
     // Hanlde nạp tiền
     const onFinish = async (values) => {
-        const { amount } = values;
-        const userId = selectedUser._id;
+        const { amount } = values
+        const userId = selectedUser._id
+        const statusDeposit = "deposit"
         const newAmount = Number(selectedUser.amount) + Number(amount)
         // console.log(newAmount);
         // return;
         
         try {
-            const response = await updateAmountUser(userId, newAmount);
-            console.log(response);
-            message.success(`Nạp tiền thành công cho ${selectedUser.userName}!`);
-            setIsModalVisible(false);
-            form.resetFields();
+            const res = await updateAmountUser(userId, newAmount);
+
+            if(res){
+                const res1 = await addBankingHistory(amount, statusDeposit, userId)
+                console.log(res1);
+                message.success(`Nạp tiền thành công cho ${selectedUser.userName}!`);
+                setIsModalVisible(false);
+                form.resetFields();
+            }else{
+                console.log("Error API");
+                
+            }
         } catch (error) {
             console.log(error);
             message.error("Có lỗi xảy ra, vui lòng thử lại!");
